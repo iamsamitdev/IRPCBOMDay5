@@ -1,0 +1,84 @@
+<div class="flex min-h-screen">
+  <!-- Left Column - Image/Brand Section -->
+  <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-800 to-purple-700 p-8 justify-center items-center">
+    <div class="max-w-md text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
+        ยินดีต้อนรับกลับมา
+      </h1>
+      <div class="w-24 h-1 bg-yellow-300 mx-auto mb-8"></div>
+      <p class="text-xl text-blue-100 mb-8">
+        เข้าสู่ระบบเพื่อจัดการข้อมูล และใช้งานฟีเจอร์ต่างๆ ของระบบ IRPC
+      </p>
+      <img src="https://picsum.photos/600/400?random=45" alt="Login Image" class="rounded-lg shadow-2xl max-w-xs mx-auto">
+    </div>
+  </div>
+
+  <!-- Right Column - Login Form -->
+  <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-gray-800">เข้าสู่ระบบ</h2>
+        <div class="w-16 h-1 bg-blue-600 mx-auto my-4"></div>
+        <p class="text-gray-600">กรอกข้อมูลด้านล่างเพื่อเข้าสู่ระบบ</p>
+      </div>
+
+      <form [formGroup]="loginForm" action="#" method="post" class="bg-white rounded-lg shadow-lg p-8">
+        <div class="mb-6">
+          <label for="username" class="block text-gray-700 font-medium mb-2">ชื่อผู้ใช้งาน</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <input 
+              formControlName="username"
+              type="text" 
+              id="username" 
+              placeholder="username@example.com" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+        
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-2">
+            <label for="password" class="block text-gray-700 font-medium">รหัสผ่าน</label>
+            <a href="#" class="text-sm text-blue-600 hover:underline">ลืมรหัสผ่าน?</a>
+          </div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <input 
+              formControlName="password"
+              type="password" 
+              id="password" 
+              placeholder="••••••••" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+        
+        <div class="flex items-center mb-6">
+          <input type="checkbox" id="remember" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+          <label for="remember" class="ml-2 block text-sm text-gray-700">จดจำการเข้าสู่ระบบ</label>
+        </div>
+        
+        <button 
+          type="submit" 
+          (click)="onSubmit()" 
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          เข้าสู่ระบบ
+        </button>
+      </form>
+      
+      <div class="text-center mt-6">
+        <p class="text-gray-600">
+          ยังไม่มีบัญชีผู้ใช้งาน? 
+          <a href="#" class="text-blue-600 hover:underline">สมัครใช้งาน</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

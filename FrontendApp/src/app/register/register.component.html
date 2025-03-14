@@ -1,0 +1,169 @@
+<div class="flex min-h-screen">
+  <!-- Left Column - Image/Brand Section -->
+  <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-800 to-purple-700 p-8 justify-center items-center">
+    <div class="max-w-md text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
+        เริ่มต้นใช้งานระบบ
+      </h1>
+      <div class="w-24 h-1 bg-yellow-300 mx-auto mb-8"></div>
+      <p class="text-xl text-blue-100 mb-8">
+        สมัครสมาชิกเพื่อเข้าถึงระบบบริหารจัดการข้อมูลองค์กรที่ทันสมัยและครบวงจร
+      </p>
+      <img src="https://picsum.photos/600/400?random=46" alt="Register Image" class="rounded-lg shadow-2xl max-w-xs mx-auto">
+    </div>
+  </div>
+
+  <!-- Right Column - Registration Form -->
+  <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-800">สมัครสมาชิก</h2>
+        <div class="w-16 h-1 bg-blue-600 mx-auto my-4"></div>
+        <p class="text-gray-600">กรอกข้อมูลด้านล่างเพื่อสร้างบัญชีผู้ใช้งาน</p>
+      </div>
+
+      <form [formGroup]="registerForm" action="#" method="post" class="bg-white rounded-lg shadow-lg p-8">
+        <!-- Full Name -->
+        <div class="mb-5">
+          <label for="fullname" class="block text-gray-700 font-medium mb-2">ชื่อ-นามสกุล</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <input 
+              formControlName="fullname"
+              type="text" 
+              id="fullname" 
+              placeholder="ชื่อ นามสกุล" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+        
+        <!-- Username -->
+        <div class="mb-5">
+          <label for="username" class="block text-gray-700 font-medium mb-2">ชื่อผู้ใช้งาน</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <input 
+              formControlName="username"
+              type="text" 
+              id="username" 
+              placeholder="username123" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-5">
+          <label for="email" class="block text-gray-700 font-medium mb-2">อีเมล</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <input 
+              formControlName="email"
+              type="email" 
+              id="email" 
+              placeholder="your.email@example.com" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+        
+        <!-- Password -->
+        <div class="mb-5">
+          <label for="password" class="block text-gray-700 font-medium mb-2">รหัสผ่าน</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <input 
+              formControlName="password"
+              type="password" 
+              id="password" 
+              placeholder="••••••••" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          <p class="text-xs text-gray-500 mt-1">รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร</p>
+        </div>
+        
+        <!-- Confirm Password -->
+        <div class="mb-5">
+          <label for="confirmPassword" class="block text-gray-700 font-medium mb-2">ยืนยันรหัสผ่าน</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <input 
+              formControlName="confirmPassword"
+              type="password" 
+              id="confirmPassword" 
+              placeholder="••••••••" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+        
+        <!-- Role Dropdown -->
+        <div class="mb-6">
+          <label for="role" class="block text-gray-700 font-medium mb-2">สิทธิ์การใช้งาน</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+              </svg>
+            </div>
+            <select 
+              formControlName="role"
+              id="role" 
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white appearance-none">
+              <option value="">-- เลือกสิทธิ์การใช้งาน --</option>
+              <option value="admin">ผู้ดูแลระบบ (Admin)</option>
+              <option value="manager">ผู้จัดการ (Manager)</option>
+              <option value="user">ผู้ใช้งานทั่วไป (User)</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Terms & Conditions -->
+        <div class="flex items-center mb-6">
+          <input type="checkbox" id="terms" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+          <label for="terms" class="ml-2 block text-sm text-gray-700">
+            ฉันยอมรับ <a href="#" class="text-blue-600 hover:underline">เงื่อนไขและข้อตกลง</a> ในการใช้งาน
+          </label>
+        </div>
+        
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          (click)="onSubmit()"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          สมัครสมาชิก
+        </button>
+      </form>
+      
+      <!-- Already have account -->
+      <div class="text-center mt-6">
+        <p class="text-gray-600">
+          มีบัญชีผู้ใช้งานแล้ว? 
+          <a href="#" class="text-blue-600 hover:underline">เข้าสู่ระบบ</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

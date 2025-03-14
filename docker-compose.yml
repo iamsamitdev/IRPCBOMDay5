@@ -1,0 +1,26 @@
+networks:
+  mssql_network:
+    name: mssql_network
+    driver: bridge
+
+services:
+  # MSSQL Service
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    # image: mcr.microsoft.com/azure-sql-edge:latest # SQL Edge for Linux ARM container
+    platform: linux/x86_64
+    container_name: mssql_container
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Developer
+    ports:
+      - "1533:1433"
+    # volumes:
+    #   - ./mssql_data:/var/opt/mssql
+    restart: always
+    networks:
+      - mssql_network
+
+volumes:
+  mssql_data:
