@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core'
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'
+import { AuthService } from '../services/auth.service'
+
 import { 
   ReactiveFormsModule, 
   FormsModule,
@@ -20,6 +22,7 @@ export class LoginComponent {
 
   private fb = inject(FormBuilder)
   private router = inject(Router)
+  private authService = inject(AuthService)
 
   // การสร้างตัวแปร FormGroup เพื่อผูกกับฟอร์ม
   loginForm!: FormGroup
@@ -61,6 +64,17 @@ export class LoginComponent {
     
     this.isLoading = true
     this.errorMessage = ''
+
+    // ส่งข้อมูลไปยังฟังก์ชัน login ใน AuthService
+    this.authService.login(this.loginForm.value)
+    .subscribe({
+      next: (response) => {
+        console.log(response)
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
     
   }
 
