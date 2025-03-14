@@ -5,7 +5,6 @@ import {
   FormsModule,
   FormGroup,
   FormBuilder,
-  FormControl,
   Validators
 } from '@angular/forms'
 import { RouterModule, Router } from '@angular/router'
