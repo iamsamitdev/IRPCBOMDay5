@@ -9,7 +9,7 @@
       <p class="text-xl text-blue-100 mb-8">
         เข้าสู่ระบบเพื่อจัดการข้อมูล และใช้งานฟีเจอร์ต่างๆ ของระบบ IRPC
       </p>
-      <img src="https://picsum.photos/600/400?random=45" alt="Login Image" class="rounded-lg shadow-2xl max-w-xs mx-auto">
+      <img src="assets/images/irpclogo.png" alt="Login Image" class="rounded-lg max-w-xs mx-auto">
     </div>
   </div>
 
@@ -22,7 +22,22 @@
         <p class="text-gray-600">กรอกข้อมูลด้านล่างเพื่อเข้าสู่ระบบ</p>
       </div>
 
-      <form [formGroup]="loginForm" action="#" method="post" class="bg-white rounded-lg shadow-lg p-8">
+      <div *ngIf="errorMessage" class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">
+              {{ errorMessage }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="bg-white rounded-lg shadow-lg p-8">
         <div class="mb-6">
           <label for="username" class="block text-gray-700 font-medium mb-2">ชื่อผู้ใช้งาน</label>
           <div class="relative">
@@ -34,9 +49,14 @@
             <input 
               formControlName="username"
               type="text" 
+              name="username"
               id="username" 
               placeholder="username@example.com" 
-              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': submitted && loginForm.controls['username'].errors}">
+          </div>
+          <div *ngIf="submitted && loginForm.controls['username'].errors" class="mt-2 text-sm text-red-600">
+            <span *ngIf="loginForm.controls['username'].errors['required']">กรุณากรอกชื่อผู้ใช้งาน</span>
           </div>
         </div>
         
@@ -54,29 +74,40 @@
             <input 
               formControlName="password"
               type="password" 
+              name="password"
               id="password" 
               placeholder="••••••••" 
-              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': submitted && loginForm.controls['password'].errors}">
+          </div>
+          <div *ngIf="submitted && loginForm.controls['password'].errors" class="mt-2 text-sm text-red-600">
+            <span *ngIf="loginForm.controls['password'].errors['required']">กรุณากรอกรหัสผ่าน</span>
+            <span *ngIf="loginForm.controls['password'].errors['minlength']">รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร</span>
           </div>
         </div>
         
         <div class="flex items-center mb-6">
-          <input type="checkbox" id="remember" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+          <input 
+            formControlName="rememberMe"
+            type="checkbox" 
+            id="remember" 
+            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
           <label for="remember" class="ml-2 block text-sm text-gray-700">จดจำการเข้าสู่ระบบ</label>
         </div>
         
         <button 
           type="submit" 
-          (click)="onSubmit()" 
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-          เข้าสู่ระบบ
+          [disabled]="isLoading"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
+          <span>เข้าสู่ระบบ</span>
+          <span *ngIf="isLoading">กำลังดำเนินการ...</span>
         </button>
       </form>
       
       <div class="text-center mt-6">
         <p class="text-gray-600">
           ยังไม่มีบัญชีผู้ใช้งาน? 
-          <a href="#" class="text-blue-600 hover:underline">สมัครใช้งาน</a>
+          <a routerLink="/register" class="text-blue-600 hover:underline cursor-pointer">สมัครใช้งาน</a>
         </p>
       </div>
     </div>
