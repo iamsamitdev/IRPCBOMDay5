@@ -4,7 +4,6 @@ import { RouterModule, Router } from '@angular/router'
 
 import { 
   ReactiveFormsModule, 
-  FormsModule,
   FormGroup,
   FormBuilder,
   Validators
@@ -19,7 +18,7 @@ import {
 })
 export class RegisterComponent {
 
-  private fb = inject(FormBuilder)
+  private fb: any = inject(FormBuilder)
   private router = inject(Router)
 
   // การสร้างตัวแปร FormGroup เพื่อผูกกับฟอร์ม
@@ -50,7 +49,7 @@ export class RegisterComponent {
       acceptTerms: [false, Validators.requiredTrue]
     }, {
       validators: this.passwordMatchValidator
-    })
+    } as const)
   }
 
   // ฟังก์ชันสำหรับตรวจสอบว่า password และ confirmPassword ตรงกันหรือไม่
