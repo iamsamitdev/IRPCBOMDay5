@@ -8,6 +8,10 @@ import { PublicLayoutComponent } from './layouts/public-layout/public-layout.com
 import { authGuard } from './guards/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { BOM_ROUTES } from './bom/bom.routes';
+import { MACHINE_ROUTES } from './machines/machines.routes';
+import { COMPONENTS_ROUTES } from './components/components.routes';
+import { SUPPLIERS_ROUTES } from './suppliers/suppliers.routes';
 
 export const routes: Routes = [
     // เส้นทางสำหรับผู้ใช้ที่ยังไม่ได้ล็อกอิน (Public Layout)
@@ -48,22 +52,22 @@ export const routes: Routes = [
                 path: 'dashboard',
                 component: DashboardComponent
             },
-            // {
-            //     path: 'bom',
-            //     children: BOM_ROUTES
-            // },
-            // {
-            //     path: 'machines',
-            //     children: MACHINE_ROUTES
-            // },
-            // {
-            //     path: 'components',
-            //     children: COMPONENTS_ROUTES
-            // },
-            // {
-            //     path: 'suppliers',
-            //     children: SUPPLIERS_ROUTES
-            // }
+            {
+                path: 'bom',
+                children: BOM_ROUTES
+            },
+            {
+                path: 'machines',
+                children: MACHINE_ROUTES
+            },
+            {
+                path: 'components',
+                children: COMPONENTS_ROUTES
+            },
+            {
+                path: 'suppliers',
+                children: SUPPLIERS_ROUTES
+            }
         ]
     },
     { path: '**', redirectTo: '' }

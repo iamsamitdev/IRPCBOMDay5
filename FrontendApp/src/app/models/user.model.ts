@@ -1,10 +1,10 @@
-// Model สำหรับการ Login
+// โมเดลสำหรับการล็อกอิน
 export class UserModelLogin {
     username!: string
     password!: string
 }
 
-// Model สำหรับการ Register
+// โมเดลสำหรับการลงทะเบียน
 export class UserModelRegister {
     username!: string
     email!: string
@@ -14,7 +14,7 @@ export class UserModelRegister {
     role!: string
 }
 
-// Model สำหรับการ Profile
+// โมเดลสำหรับข้อมูลผู้ใช้
 export class UserModel {
     id?: string
     username!: string
@@ -24,7 +24,7 @@ export class UserModel {
     token?: string
 }
 
-// Model สำหรับการตอบกลับจาก Backend API
+// โมเดลสำหรับการตอบกลับจาก API
 export interface AuthResponse {
     success: boolean
     message: string
