@@ -39,14 +39,25 @@ namespace BackendAPI.DTOs
     
     public class AuthResponseDTO
     {
-        public int UserId { get; set; }
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public AuthResponseData? Data { get; set; }
+        public object? Errors { get; set; }
+    }
+
+    public class AuthResponseData
+    {
+        public required string Token { get; set; }
+        public required UserDTO User { get; set; }
+    }
+
+    public class UserDTO
+    {
+        public int Id { get; set; }
         public required string Username { get; set; }
         public required string Email { get; set; }
         public required string FullName { get; set; }
         public required string Role { get; set; }
-        public required string Token { get; set; }
-        public required string RefreshToken { get; set; }
-        public required DateTime TokenExpiration { get; set; }
     }
     
     public class RefreshTokenDTO

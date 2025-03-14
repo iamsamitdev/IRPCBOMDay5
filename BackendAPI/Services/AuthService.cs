@@ -22,133 +22,217 @@ namespace BackendAPI.Services
         
         public async Task<AuthResponseDTO> RegisterAsync(RegisterDTO registerDto)
         {
-            // Check if username already exists
-            if (await _context.Users.AnyAsync(u => u.Username == registerDto.Username))
+            try
             {
-                throw new Exception("Username already exists");
+                // Check if username already exists
+                if (await _context.Users.AnyAsync(u => u.Username == registerDto.Username))
+                {
+                    return new AuthResponseDTO
+                    {
+                        Success = false,
+                        Message = "Username already exists",
+                        Errors = new { Username = "Username already exists" }
+                    };
+                }
+                
+                // Check if email already exists
+                if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
+                {
+                    return new AuthResponseDTO
+                    {
+                        Success = false,
+                        Message = "Email already exists",
+                        Errors = new { Email = "Email already exists" }
+                    };
+                }
+                
+                // Create new user
+                var user = new User
+                {
+                    Username = registerDto.Username,
+                    Email = registerDto.Email,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
+                    FullName = registerDto.FullName,
+                    Role = registerDto.Role,
+                    CreatedAt = DateTime.UtcNow,
+                    IsActive = true
+                };
+                
+                // Add user to database
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+                
+                // Generate tokens
+                var token = _jwtService.GenerateJwtToken(user);
+                var refreshToken = _jwtService.GenerateRefreshToken();
+                
+                // Save refresh token
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenValidityInDays);
+                await _context.SaveChangesAsync();
+                
+                // Return response
+                return new AuthResponseDTO
+                {
+                    Success = true,
+                    Message = "Registration successful",
+                    Data = new AuthResponseData
+                    {
+                        Token = token,
+                        User = new UserDTO
+                        {
+                            Id = user.Id,
+                            Username = user.Username,
+                            Email = user.Email,
+                            FullName = user.FullName,
+                            Role = user.Role
+                        }
+                    }
+                };
             }
-            
-            // Check if email already exists
-            if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
+            catch (Exception ex)
             {
-                throw new Exception("Email already exists");
+                return new AuthResponseDTO
+                {
+                    Success = false,
+                    Message = "Registration failed",
+                    Errors = new { Error = ex.Message }
+                };
             }
-            
-            // Create new user
-            var user = new User
-            {
-                Username = registerDto.Username,
-                Email = registerDto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
-                FullName = registerDto.FullName,
-                Role = registerDto.Role,
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true
-            };
-            
-            // Add user to database
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            
-            // Generate tokens
-            var token = _jwtService.GenerateJwtToken(user);
-            var refreshToken = _jwtService.GenerateRefreshToken();
-            
-            // Save refresh token
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenValidityInDays);
-            await _context.SaveChangesAsync();
-            
-            // Return response
-            return new AuthResponseDTO
-            {
-                UserId = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FullName = user.FullName,
-                Role = user.Role,
-                Token = token,
-                RefreshToken = refreshToken,
-                TokenExpiration = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes)
-            };
         }
         
         public async Task<AuthResponseDTO> LoginAsync(LoginDTO loginDto)
         {
-            // Find user by username
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
-            
-            // Check if user exists
-            if (user == null)
+            try
             {
-                throw new Exception("Invalid username or password");
+                // Find user by username
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
+                
+                // Check if user exists
+                if (user == null)
+                {
+                    return new AuthResponseDTO
+                    {
+                        Success = false,
+                        Message = "Invalid username or password",
+                        Errors = new { Credentials = "Invalid username or password" }
+                    };
+                }
+                
+                // Check if user is active
+                if (!user.IsActive)
+                {
+                    return new AuthResponseDTO
+                    {
+                        Success = false,
+                        Message = "User account is disabled",
+                        Errors = new { Account = "User account is disabled" }
+                    };
+                }
+                
+                // Verify password
+                if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+                {
+                    return new AuthResponseDTO
+                    {
+                        Success = false,
+                        Message = "Invalid username or password",
+                        Errors = new { Credentials = "Invalid username or password" }
+                    };
+                }
+                
+                // Generate tokens
+                var token = _jwtService.GenerateJwtToken(user);
+                var refreshToken = _jwtService.GenerateRefreshToken();
+                
+                // Save refresh token
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenValidityInDays);
+                await _context.SaveChangesAsync();
+                
+                // Return response
+                return new AuthResponseDTO
+                {
+                    Success = true,
+                    Message = "Login successful",
+                    Data = new AuthResponseData
+                    {
+                        Token = token,
+                        User = new UserDTO
+                        {
+                            Id = user.Id,
+                            Username = user.Username,
+                            Email = user.Email,
+                            FullName = user.FullName,
+                            Role = user.Role
+                        }
+                    }
+                };
             }
-            
-            // Check if user is active
-            if (!user.IsActive)
+            catch (Exception ex)
             {
-                throw new Exception("User account is disabled");
+                return new AuthResponseDTO
+                {
+                    Success = false,
+                    Message = "Login failed",
+                    Errors = new { Error = ex.Message }
+                };
             }
-            
-            // Verify password
-            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
-            {
-                throw new Exception("Invalid username or password");
-            }
-            
-            // Generate tokens
-            var token = _jwtService.GenerateJwtToken(user);
-            var refreshToken = _jwtService.GenerateRefreshToken();
-            
-            // Save refresh token
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenValidityInDays);
-            await _context.SaveChangesAsync();
-            
-            // Return response
-            return new AuthResponseDTO
-            {
-                UserId = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FullName = user.FullName,
-                Role = user.Role,
-                Token = token,
-                RefreshToken = refreshToken,
-                TokenExpiration = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes)
-            };
         }
         
         public async Task<AuthResponseDTO> RefreshTokenAsync(string token, string refreshToken)
         {
-            var principal = _jwtService.GetPrincipalFromExpiredToken(token);
-            var userId = int.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            
-            var user = await _context.Users.FindAsync(userId);
-            
-            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            try
             {
-                throw new Exception("Invalid refresh token");
+                var principal = _jwtService.GetPrincipalFromExpiredToken(token);
+                var userId = int.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier)!);
+                
+                var user = await _context.Users.FindAsync(userId);
+                
+                if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                {
+                    return new AuthResponseDTO
+                    {
+                        Success = false,
+                        Message = "Invalid refresh token",
+                        Errors = new { Token = "Invalid refresh token" }
+                    };
+                }
+                
+                var newToken = _jwtService.GenerateJwtToken(user);
+                var newRefreshToken = _jwtService.GenerateRefreshToken();
+                
+                user.RefreshToken = newRefreshToken;
+                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenValidityInDays);
+                await _context.SaveChangesAsync();
+                
+                return new AuthResponseDTO
+                {
+                    Success = true,
+                    Message = "Token refreshed successfully",
+                    Data = new AuthResponseData
+                    {
+                        Token = newToken,
+                        User = new UserDTO
+                        {
+                            Id = user.Id,
+                            Username = user.Username,
+                            Email = user.Email,
+                            FullName = user.FullName,
+                            Role = user.Role
+                        }
+                    }
+                };
             }
-            
-            var newToken = _jwtService.GenerateJwtToken(user);
-            var newRefreshToken = _jwtService.GenerateRefreshToken();
-            
-            user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenValidityInDays);
-            await _context.SaveChangesAsync();
-            
-            return new AuthResponseDTO
+            catch (Exception ex)
             {
-                UserId = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FullName = user.FullName,
-                Role = user.Role,
-                Token = newToken,
-                RefreshToken = newRefreshToken,
-                TokenExpiration = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes)
-            };
+                return new AuthResponseDTO
+                {
+                    Success = false,
+                    Message = "Token refresh failed",
+                    Errors = new { Error = ex.Message }
+                };
+            }
         }
         
         public async Task RevokeTokenAsync(int userId)
