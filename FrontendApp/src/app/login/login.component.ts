@@ -11,6 +11,9 @@ import {
 } from '@angular/forms'
 import { RouterModule, Router } from '@angular/router'
 
+// Import SweetAlert2
+import Swal from 'sweetalert2'
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -69,10 +72,40 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value)
     .subscribe({
       next: (response) => {
-        console.log(response)
+        // ตรวจสอบว่า success หรือไม่
+        if (response.success) {
+          // แสดงข้อความเมื่อ Login สำเร็จ
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Success',
+            text: 'Welcome to our website',
+            showConfirmButton: false,
+            timer: 2000
+          })
+          // ส่งไปหน้า Home
+          this.router.navigate(['/dashboard'])
+        } else {
+          // แสดงข้อความเมื่อ Login ไม่สำเร็จ
+          Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: response.message,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
+        this.isLoading = false
       },
       error: (error) => {
         console.log(error)
+        // แสดงข้อความเมื่อ Login ไม่สำเร็จ
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: error.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
       }
     })
     
